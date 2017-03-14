@@ -19,7 +19,7 @@ namespace TheFrosty;
 class Geolocation {
 
     const VERSION = '1.0.0';
-    const PREFIX = 'geoObject';
+    const PREFIX = 'geolocation';
     const OPTION_GROUP = self::PREFIX . '-settings-group';
     const SHORTCODE = self::PREFIX;
 
@@ -76,8 +76,8 @@ class Geolocation {
     function script_loader_tag( $tag, $handle, $src ) {
         $defer_scripts = [
             'google-maps',
-            'geoObject-admin',
-            'geoObject',
+            'geolocation-admin',
+            'geolocation',
         ];
 
         if ( in_array( $handle, $defer_scripts, true ) ) {
@@ -97,7 +97,7 @@ class Geolocation {
         );
 
         wp_register_script(
-            'geoObject-admin',
+            'geolocation-admin',
             plugins_url( 'assets/js/admin.js', __FILE__ ),
             [ 'google-maps', 'jquery' ],
             self::VERSION,
@@ -105,7 +105,7 @@ class Geolocation {
         );
 
         wp_register_script(
-            'geoObject-settings',
+            'geolocation-settings',
             plugins_url( 'assets/js/settings.js', __FILE__ ),
             [ 'jquery' ],
             self::VERSION,
@@ -121,7 +121,7 @@ class Geolocation {
             return;
         }
 
-        wp_enqueue_script( 'geoObject-admin' );
+        wp_enqueue_script( 'geolocation-admin' );
 
         add_action( 'admin_footer', function() {
             global $post;
@@ -131,8 +131,8 @@ class Geolocation {
             }
 
             wp_localize_script(
-                'geoObject-admin',
-                'geoObject',
+                'geolocation-admin',
+                'geolocation_object',
                 [
                     'latitude' => $this->get_geo_longitude( $post->ID ),
                     'longitude' => $this->get_geo_latitude( $post->ID ),
@@ -155,17 +155,17 @@ class Geolocation {
             'Geolocation Settings',
             'Geolocation',
             'manage_options',
-            'geoObject',
+            'geolocation',
             function() {
                 include __DIR__ . '/templates/settings-page.php';
             }
         );
 
         add_action( 'admin_print_scripts-' . $hook, function() {
-            wp_enqueue_script( 'geoObject-settings' );
+            wp_enqueue_script( 'geolocation-settings' );
             wp_localize_script(
-                'geoObject-settings',
-                'geoObject',
+                'geolocation-settings',
+                'geolocation',
                 [
                     'img_path' => esc_url( plugins_url( 'assets/img/zoom/', __FILE__ ) ),
                 ]
@@ -177,8 +177,8 @@ class Geolocation {
 
     public function add_meta_box() {
         add_meta_box(
-            'geoObject',
-            __( 'Geolocation', 'geoObject' ),
+            'geolocation',
+            __( 'Geolocation', 'geolocation' ),
             function() {
                 include __DIR__ . '/templates/meta-box.php';
             },
@@ -214,11 +214,11 @@ class Geolocation {
             }
         }
 
-        $latitude  = $this->clean_coordinate( $_POST['geoObject-latitude'] );
-        $longitude = $this->clean_coordinate( $_POST['geoObject-longitude'] );
+        $latitude  = $this->clean_coordinate( $_POST['geolocation-latitude'] );
+        $longitude = $this->clean_coordinate( $_POST['geolocation-longitude'] );
         $address   = $this->reverse_geocode( $latitude, $longitude );
-        $public    = $_POST['geoObject-public'];
-        $on        = $_POST['geoObject-on'];
+        $public    = $_POST['geolocation-public'];
+        $on        = $_POST['geolocation-on'];
 
         if ( ! empty( $this->clean_coordinate( $latitude ) ) &&
              ! empty( $this->clean_coordinate( $longitude ) )
@@ -249,7 +249,7 @@ class Geolocation {
 
     public function frontend_scripts() {
         wp_register_style(
-            'geoObject',
+            'geolocation',
             plugins_url( 'assets/css/style.css', __FILE__ ),
             [ 'google-jsapi', 'google-maps', 'jquery' ],
             self::VERSION,
@@ -257,8 +257,8 @@ class Geolocation {
         );
 
         wp_register_script(
-            'geoObject',
-            plugins_url( 'assets/js/geoObject.js', __FILE__ ),
+            'geolocation',
+            plugins_url( 'assets/js/geolocation.js', __FILE__ ),
             [ 'google-jsapi', 'google-maps', 'jquery' ],
             self::VERSION,
             true
@@ -271,11 +271,11 @@ class Geolocation {
                 return;
             }
 
-            wp_enqueue_style( 'geoObject' );
-            wp_enqueue_script( 'geoObject' );
+            wp_enqueue_style( 'geolocation' );
+            wp_enqueue_script( 'geolocation' );
             wp_localize_script(
-                'geoObject',
-                'geoObject',
+                'geolocation',
+                'geolocation_object',
                 [
                     'latitude' => $this->get_geo_longitude( $post->ID ),
                     'longitude' => $this->get_geo_latitude( $post->ID ),
@@ -293,7 +293,7 @@ class Geolocation {
     }
 
     public function add_geolocation_html() {
-        echo '<div id="map" class="geoObject-map" style="width:' .
+        echo '<div id="map" class="geolocation-map" style="width:' .
              absint( get_option( 'geolocation_map_width' ) ) . 'px;height:' .
              absint( get_option( 'geolocation_map_height' ) ) . 'px;"></div>';
     }
@@ -319,7 +319,7 @@ class Geolocation {
                 $address = $this->reverse_geocode( $latitude, $longitude );
             }
 
-            $html = '<a class="geoObject-link" href="javascript:;" id="geoObject-' .
+            $html = '<a class="geolocation-link" href="javascript:;" id="geolocation-' .
                     $post->ID . '" name="' . $latitude . ',' .
                     $longitude . '">Posted from ' . esc_html( $address ) . '.</a>';
 

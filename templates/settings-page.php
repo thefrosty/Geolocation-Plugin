@@ -43,7 +43,7 @@ if ( get_option( 'geolocation_wp_pin' ) ) {
 </div>
 
 <form method="post" action="<?php echo esc_url( admin_url( 'options.php' ) ); ?>">
-    <?php settings_fields( 'geoObject-settings-group' ); ?>
+    <?php settings_fields( \TheFrosty\Geolocation::OPTION_GROUP ); ?>
     <table class="form-table">
         <tr valign="top">
         <tr valign="top">

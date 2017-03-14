@@ -6,35 +6,35 @@
 
     hasLocation: false,
     center: new google.maps.LatLng(0.0, 0.0),
-    geoObject: window.geoObject,
+    geolocationObject: window.geolocation_object,
     $attr: {
-      public: $('#geoObject-public'),
-      latitude: $('#geoObject-latitude'),
-      longitude: $('#geoObject-longitude'),
-      address: $('#geoObject-address'),
-      load: $('#geoObject-load'),
-      enabled: $('#geoObject-enabled'),
-      disabled: $('#geoObject-disabled'),
-      map: $('#geoObject-map')
+      public: $('#geolocation-public'),
+      latitude: $('#geolocation-latitude'),
+      longitude: $('#geolocation-longitude'),
+      address: $('#geolocation-address'),
+      load: $('#geolocation-load'),
+      enabled: $('#geolocation-enabled'),
+      disabled: $('#geolocation-disabled'),
+      map: $('#geolocation-map')
     },
 
     init: function () {
-      if (!this.geoObject.is_public) {
+      if (!this.geolocationObject.is_public) {
         this.$attr.public.attr('checked', false);
       } else {
         this.$attr.public.attr('checked', true);
       }
 
-      if (!this.geoObject.is_enabled) {
+      if (!this.geolocationObject.is_enabled) {
         this.disableGeo();
       } else {
         this.enableGeo();
       }
 
-      if ((this.geoObject.latitude !== '') && (this.geoObject.longitude !== '')) {
+      if ((this.geolocationObject.latitude !== '') && (this.geolocationObject.longitude !== '')) {
         this.hasLocation = true;
         this.center = new google.maps.LatLng(
-          this.geoObject.latitude, this.geoObject.longitude
+          this.geolocationObject.latitude, this.geolocationObject.longitude
         );
         this.$attr.latitude.val(this.center.lat());
         this.$attr.latitude.val(this.center.lng());
@@ -43,25 +43,25 @@
       //
 
       var mapOptions = {
-          'zoom': this.geoObject.zoom,
+          'zoom': this.geolocationObject.zoom,
           'center': this.center,
           'mapTypeId': google.maps.MapTypeId.ROADMAP
         },
-        image = this.geoObject.images.pin,
+        image = this.geolocationObject.images.pin,
         shadow = new google.maps.MarkerImage(
-          this.geoObject.images.pin_shadow,
+          this.geolocationObject.images.pin_shadow,
           new google.maps.Size(39, 23),
           new google.maps.Point(0, 0),
           new google.maps.Point(12, 25)
         );
 
-      var map = new google.maps.Map(document.getElementById('geoObject-map'), mapOptions);
+      var map = new google.maps.Map(document.getElementById('geolocation-map'), mapOptions);
       var marker_options = {
         position: this.center,
         map: map,
         title: 'Post Location'
       };
-      if (this.geoObject.has_pin) {
+      if (this.geolocationObject.has_pin) {
         marker_options.icon = image;
         marker_options.shadow = shadow;
       }
@@ -177,15 +177,13 @@
     enableGeo: function () {
       this.$attr.address.removeAttr('disabled');
       this.$attr.load.removeAttr('disabled');
-      this.$attr.map.css('filter', '');
       this.$attr.map.css('opacity', '');
-      this.$attr.map.css('-moz-opacity', '');
       this.$attr.public.removeAttr('disabled');
       this.$attr.map.removeAttr('readonly');
       this.$attr.disabled.removeAttr('checked');
       this.$attr.enabled.attr('checked', 'checked');
 
-      if (this.geoObject.is_public) {
+      if (this.geolocationObject.is_public) {
         this.$attr.public.prop('checked', true);
       }
     },
@@ -193,9 +191,7 @@
     disableGeo: function () {
       this.$attr.address.attr('disabled', 'disabled');
       this.$attr.load.attr('disabled', 'disabled');
-      this.$attr.map.css('filter', 'alpha(opacity=50)');
       this.$attr.map.css('opacity', '0.5');
-      this.$attr.map.css('-moz-opacity', '0.5');
       this.$attr.map.attr('readonly', 'readonly');
       this.$attr.public.attr('disabled', 'disabled');
 
@@ -203,7 +199,7 @@
       this.$attr.enabled.removeProp('checked');
       this.$attr.disabled.prop('checked', true);
 
-      if (this.geoObject.is_public) {
+      if (this.geolocationObject.is_public) {
         this.$attr.public.prop('checked', true);
       }
     }

@@ -1,6 +1,6 @@
 var Geolocation_Settings = {
 
-  geoObject: window.geoObject,
+  geolocationObject: window.geolocation_object,
   path: geolocation.img_path,
 
   swap_zoom_sample: function (id) {

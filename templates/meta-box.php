@@ -1,5 +1,5 @@
 <label class="screen-reader-text"
-       for="geolocation-address"><?php esc_html_e( 'Geolocation', 'geoObject' ); ?></label>
+       for="geolocation-address"><?php esc_html_e( 'Geolocation', 'geolocation' ); ?></label>
 <div class="taghint">Enter your address</div>
 <input type="text" id="geolocation-address" name="geolocation-address" class="newtag form-input-tip"
        size="25" autocomplete="off" value=""/>
